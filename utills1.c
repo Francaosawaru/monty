@@ -1,9 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "monty.h"
 
 /**
  * _itoa - turns an integer to characters
- * @n: to cinvert
- * Return: the corresponding integer
+ * @n: integer to convert
+ * Return: the corresponding string
  */
 char *_itoa(int n)
 {
@@ -12,16 +15,20 @@ char *_itoa(int n)
 
 	length = snprintf(NULL, 0, "%d", n);
 	value = malloc(sizeof(char) * (length + 1));
-	if (!value)
+	if (value == NULL)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
-	sprintf(value, "%d", n);
 
-	return (value);
+	if (snprintf(value, length + 1, "%d", n) < 0)
+	{
+		fprintf(stderr, "Error: snprintf failed\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return value;
 }
-
 
 /**
  * free_xtrn - frees the xtrn struct
@@ -29,11 +36,12 @@ char *_itoa(int n)
  */
 void free_xtrn(void)
 {
-	fclose(mt.m_script);
+	if (mt.m_script != NULL)
+		fclose(mt.m_script);
+
 	free(mt.buffer);
 	free_stack(mt.stack);
 }
-
 
 /**
  * free_stack - frees the xtrn stack
@@ -42,7 +50,7 @@ void free_xtrn(void)
  */
 void free_stack(stack_t *head)
 {
-	stack_t *current_node = NULL;
+	stack_t *current_node;
 
 	while (head != NULL)
 	{
@@ -51,7 +59,6 @@ void free_stack(stack_t *head)
 		free(current_node);
 	}
 }
-
 
 /**
  * my_isdigit - check if a string contains digits only
@@ -63,14 +70,16 @@ int my_isdigit(char *nstr)
 	int i;
 
 	if (nstr == NULL)
-		return (0);
-	for (i = 0; nstr[i] != '\0' ; i++)
+		return 0;
+
+	for (i = 0; nstr[i] != '\0'; i++)
 	{
 		if (nstr[0] == '-')
 			continue;
-		if (nstr[i] < 48 || nstr[i] > 57)
-			return (0);
+
+		if (nstr[i] < '0' || nstr[i] > '9')
+			return 0;
 	}
 
-	return (1);
+	return 1;
 }

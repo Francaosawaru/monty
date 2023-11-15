@@ -1,10 +1,10 @@
 #ifndef MONTY_H_
 #define MONTY_H_
 
+#include <stdio.h>
 #include <errno.h>
 #include <limits.h>
 #include <stddef.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -57,8 +57,8 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-char *_itoa(int);
-int my_isdigit(char *);
+char *_itoa(int n);
+int my_isdigit(char *nstr);
 void (*getfunc(char *, unsigned int))(stack_t **, unsigned int);
 void _add(stack_t **, unsigned int);
 void _div(stack_t **, unsigned int);
@@ -77,7 +77,7 @@ void _rotr(stack_t **, unsigned int);
 void _stack(stack_t **, unsigned int);
 void _sub(stack_t **, unsigned int);
 void _swap(stack_t **, unsigned int);
-void free_stack(stack_t *);
+void free_stack(stack_t *head);
 void free_xtrn(void);
 void q_push(stack_t **, int);
 void setup_monty(char **, unsigned int);
